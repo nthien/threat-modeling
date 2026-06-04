@@ -1,0 +1,218 @@
+{
+  "version": "2.0",
+  "summary": {
+    "title": "E-commerce Platform - Kubernetes Threat Model",
+    "owner": "DevSecOps Team",
+    "description": "Mẫu Threat Model cho hệ thống E-commerce trên Kubernetes. Bao gồm các namespace public, core, data và messaging.",
+    "createdAt": "2026-06-04T09:00:00.000Z",
+    "updatedAt": "2026-06-04T09:00:00.000Z"
+  },
+  "detail": {
+    "diagrams": [
+      {
+        "id": "diagram-001",
+        "title": "E-commerce Kubernetes Architecture",
+        "diagramType": "STRIDE",
+        "version": "2.0",
+        "cells": [
+          {
+            "id": "tb-internet",
+            "type": "trust-boundary",
+            "name": "Internet",
+            "description": "External users and third-party systems",
+            "position": { "x": 50, "y": 50 },
+            "size": { "width": 1100, "height": 700 }
+          },
+          {
+            "id": "tb-cluster",
+            "type": "trust-boundary",
+            "name": "Kubernetes Cluster",
+            "description": "Toàn bộ cụm Kubernetes production",
+            "position": { "x": 100, "y": 100 },
+            "size": { "width": 1000, "height": 600 }
+          },
+          {
+            "id": "tb-public",
+            "type": "trust-boundary",
+            "name": "namespace-public",
+            "description": "Ingress, API Gateway, BFF",
+            "position": { "x": 150, "y": 130 },
+            "size": { "width": 300, "height": 200 }
+          },
+          {
+            "id": "tb-core",
+            "type": "trust-boundary",
+            "name": "namespace-core",
+            "description": "Business microservices",
+            "position": { "x": 480, "y": 130 },
+            "size": { "width": 400, "height": 350 }
+          },
+          {
+            "id": "tb-data",
+            "type": "trust-boundary",
+            "name": "namespace-data",
+            "description": "Databases and cache layer",
+            "position": { "x": 150, "y": 380 },
+            "size": { "width": 300, "height": 200 }
+          },
+          {
+            "id": "tb-messaging",
+            "type": "trust-boundary",
+            "name": "namespace-messaging",
+            "description": "Kafka event streaming",
+            "position": { "x": 480, "y": 380 },
+            "size": { "width": 400, "height": 200 }
+          },
+          {
+            "id": "ee-customer",
+            "type": "external-entity",
+            "name": "Customer",
+            "description": "Người dùng cuối (Web + Mobile App)",
+            "position": { "x": 80, "y": 200 },
+            "size": { "width": 120, "height": 60 }
+          },
+          {
+            "id": "ee-payment-gateway",
+            "type": "external-entity",
+            "name": "Payment Gateway",
+            "description": "VNPay / Stripe / MoMo",
+            "position": { "x": 80, "y": 450 },
+            "size": { "width": 140, "height": 60 }
+          },
+          {
+            "id": "proc-ingress",
+            "type": "process",
+            "name": "Ingress / API Gateway",
+            "description": "Cổng vào cluster, routing và rate limiting",
+            "position": { "x": 200, "y": 180 },
+            "size": { "width": 160, "height": 70 }
+          },
+          {
+            "id": "proc-bff",
+            "type": "process",
+            "name": "BFF Service",
+            "description": "Backend for Frontend - tổng hợp dữ liệu cho client",
+            "position": { "x": 200, "y": 270 },
+            "size": { "width": 160, "height": 70 }
+          },
+          {
+            "id": "proc-auth",
+            "type": "process",
+            "name": "Auth Service",
+            "description": "Xác thực & phân quyền (JWT, OAuth2)",
+            "position": { "x": 520, "y": 180 },
+            "size": { "width": 160, "height": 70 }
+          },
+          {
+            "id": "proc-user",
+            "type": "process",
+            "name": "User Service",
+            "description": "Quản lý thông tin người dùng (PII)",
+            "position": { "x": 520, "y": 270 },
+            "size": { "width": 160, "height": 70 }
+          },
+          {
+            "id": "proc-order",
+            "type": "process",
+            "name": "Order Service",
+            "description": "Xử lý đơn hàng và business logic",
+            "position": { "x": 700, "y": 270 },
+            "size": { "width": 160, "height": 70 }
+          },
+          {
+            "id": "proc-payment",
+            "type": "process",
+            "name": "Payment Service",
+            "description": "Xử lý thanh toán và tích hợp gateway",
+            "position": { "x": 520, "y": 360 },
+            "size": { "width": 160, "height": 70 }
+          },
+          {
+            "id": "store-user-db",
+            "type": "data-store",
+            "name": "User PostgreSQL",
+            "description": "Lưu thông tin người dùng, PII",
+            "position": { "x": 200, "y": 420 },
+            "size": { "width": 160, "height": 70 }
+          },
+          {
+            "id": "store-order-db",
+            "type": "data-store",
+            "name": "Order PostgreSQL",
+            "description": "Lưu đơn hàng và lịch sử thanh toán",
+            "position": { "x": 200, "y": 510 },
+            "size": { "width": 160, "height": 70 }
+          },
+          {
+            "id": "store-redis",
+            "type": "data-store",
+            "name": "Redis Cache",
+            "description": "Session, JWT cache, product cache",
+            "position": { "x": 380, "y": 420 },
+            "size": { "width": 140, "height": 70 }
+          },
+          {
+            "id": "store-kafka",
+            "type": "data-store",
+            "name": "Kafka",
+            "description": "Event streaming (order.created, payment.success...)",
+            "position": { "x": 550, "y": 450 },
+            "size": { "width": 160, "height": 70 }
+          }
+        ],
+        "threats": [
+          {
+            "id": "threat-001",
+            "title": "JWT Token bị lộ hoặc giả mạo",
+            "description": "Attacker có thể đánh cắp hoặc giả mạo JWT để truy cập trái phép vào hệ thống.",
+            "severity": "High",
+            "type": "Spoofing",
+            "status": "Open",
+            "mitigation": "Sử dụng short-lived JWT + Refresh Token rotation. Bắt buộc mTLS giữa các service. Lưu Refresh Token an toàn (HttpOnly cookie hoặc secure storage).",
+            "cellId": "proc-auth"
+          },
+          {
+            "id": "threat-002",
+            "title": "Lateral movement giữa các microservice",
+            "description": "Pod bị compromise trong namespace-core có thể gọi sang các service khác mà không bị chặn.",
+            "severity": "High",
+            "type": "Tampering",
+            "status": "Open",
+            "mitigation": "Triển khai NetworkPolicy chặt chẽ giữa các namespace. Sử dụng Service Mesh (Istio/Linkerd) với mTLS bắt buộc. Áp dụng Principle of Least Privilege.",
+            "cellId": "tb-core"
+          },
+          {
+            "id": "threat-003",
+            "title": "Database credential bị lộ",
+            "description": "Secret kết nối database bị lộ do mount không an toàn hoặc hardcode trong code.",
+            "severity": "Critical",
+            "type": "Information Disclosure",
+            "status": "Open",
+            "mitigation": "Sử dụng External Secrets Operator + Kubernetes Secrets encryption at rest. Không mount secret trực tiếp vào pod nếu không cần thiết.",
+            "cellId": "store-user-db"
+          },
+          {
+            "id": "threat-004",
+            "title": "Không có Network Policy giữa các namespace",
+            "description": "Pod trong namespace public có thể giao tiếp tự do với namespace data.",
+            "severity": "High",
+            "type": "Tampering",
+            "status": "Open",
+            "mitigation": "Bắt buộc implement NetworkPolicy. Chỉ cho phép traffic từ namespace-core đến namespace-data. Deny all traffic mặc định.",
+            "cellId": "tb-data"
+          },
+          {
+            "id": "threat-005",
+            "title": "Supply chain attack qua container image",
+            "description": "Kéo image độc hại từ public registry (Docker Hub) dẫn đến backdoor trong production.",
+            "severity": "High",
+            "type": "Tampering",
+            "status": "Open",
+            "mitigation": "Sử dụng private container registry. Bắt buộc image signing + verification. Dùng Kyverno hoặc OPA để enforce policy.",
+            "cellId": "proc-ingress"
+          }
+        ]
+      }
+    ]
+  }
+}
